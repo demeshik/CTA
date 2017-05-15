@@ -27,11 +27,17 @@ namespace CTA
 
         public IConfigurationRoot Configuration { get; }
 
-        
+
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddIdentity<User, Role>()
+            services.AddDbContext<DBContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
+            );
+            services.AddIdentity<User, Role>(options => {
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireDigit = false;
+                options.Password.RequireUppercase = false;
+                })
                 .AddEntityFrameworkStores<DBContext>()
                 .AddDefaultTokenProviders();
             

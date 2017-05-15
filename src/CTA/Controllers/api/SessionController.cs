@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using CTA.Models;
@@ -23,44 +20,64 @@ namespace CTA.Controllers.api
             loginManager = _loginManager;
             roleManager = _roleManager;
         }
-        
+
+        private ActionResult SendBad(IdentityError identityError)
+        {
+            return BadRequest(Json(new { status = "Error", description = identityError.Description }));
+        }
+        private ActionResult SendBad(IEnumerable<IdentityError> Errors)
+        {
+            string ErrorMessage = string.Empty;
+            foreach (var error in Errors)
+            {
+                ErrorMessage += error.Code + ";";
+            }
+            ErrorMessage.Remove(ErrorMessage.Length - 1, 1);
+            ErrorMessage += ".";
+            return BadRequest(Json(new { status = "Error", description = ErrorMessage }));
+        }
+
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        [Route("")]
         public ActionResult Register(RegisterUserModel user)
         {
             if(ModelState.IsValid)
             {
-                User _user = new User();
-                _user.UserName = user.UserName;
-                _user.Email = user.Email;
-                _user.Country = user.Country;
-                _user.City = user.City;
-                _user.CreditCard = user.CreditCard;
-
+                User _user = new User()
+                {
+                    UserName = user.UserName,
+                    Email = user.Email,
+                    Country = user.Country,
+                    City = user.City,
+                    CreditCard = user.CreditCard
+                };
                 IdentityResult result = userManager.CreateAsync(_user, user.Password).Result;
 
                 if(result.Succeeded)
                 {
                     if(!roleManager.RoleExistsAsync("User").Result)
                     {
-                        Role role = new Role();
-                        role.Description = "Simple user";
+                        Role role = new Role()
+                        {
+                            Name = "User",
+                            Description = "Simple user"
+                        };
                         IdentityResult roleResult = roleManager.CreateAsync(role).Result;
                         if(!roleResult.Succeeded)
                         {
-                            ModelState.AddModelError("", "Error while creating role!");
-                            return Json(new { status = "Error", description = "Error while creating role" });
+                            //ModelState.AddModelError("", "Error while creating role!");
+                            return SendBad(roleResult.Errors);
                         }
                     }
                     userManager.AddToRoleAsync(_user, "User").Wait();
                     return Created("",Json(_user));
                 }
             }
-            return BadRequest(new { status = "Error", description = "Error in model" });
+            return SendBad((new IdentityError { Code = "Error Model", Description = "Error in user definition" }));
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        [Route("Authorization")]
         public ActionResult Login(LoginUserModel user)
         {
             if(ModelState.IsValid)
@@ -71,47 +88,15 @@ namespace CTA.Controllers.api
                     return Ok(Json(new { status = "OK" }));
                 }
             }
-            return BadRequest(Json(new { status = "Error", description = "Error parameters" }));
+            return SendBad(new IdentityError { Code = "Error model", Description = "Error in login model" });
         }
 
-        [HttpGet]
-        [ValidateAntiForgeryToken]
+        [Route("Logout")]
         public IActionResult LogOff()
         {
             loginManager.SignOutAsync().Wait();
             return Ok(Json(new { status = "OK" }));
         }
 
-
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
     }
 }
