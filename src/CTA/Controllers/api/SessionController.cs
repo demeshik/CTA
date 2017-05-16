@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using CTA.Models;
 using CTA.ViewModels;
+using AutoMapper;
+using CTA.DTO;
 
 namespace CTA.Controllers.api
 {
@@ -85,13 +87,16 @@ namespace CTA.Controllers.api
                 var result = loginManager.PasswordSignInAsync(user.UserName, user.Password, user.RememberMe, false).Result;
                 if(result.Succeeded)
                 {
-                    return Ok(Json(new { status = "OK" }));
+                    User _user = userManager.FindByNameAsync(user.UserName).Result;
+                    Mapper.Initialize(cfg => cfg.CreateMap<User, UserDTO>());
+                    UserDTO resUser = Mapper.Map<User, UserDTO>(_user);
+                    return Ok(Json(resUser));
                 }
             }
             return SendBad(new IdentityError { Code = "Error model", Description = "Error in login model" });
         }
 
-        [Route("Logout")]
+        [HttpDelete]
         public IActionResult LogOff()
         {
             loginManager.SignOutAsync().Wait();
