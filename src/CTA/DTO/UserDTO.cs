@@ -1,15 +1,15 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CTA.Models
+namespace CTA.DTO
 {
-    public class User:IdentityUser<int>
+    public class UserDTO
     {
+        public string Id { get; set; }
+        public string Name { get; set; }
         public string Country { get; set; }
         public string City { get; set; }
-        public string CreditCard { get; set; }
     }
 }
