@@ -1,25 +1,25 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Identity;
-using CTA.Models;
 using CTA.ViewModels;
+using CTA.Models;
+using Microsoft.AspNetCore.Identity;
 using AutoMapper;
 using CTA.DTO;
 
 namespace CTA.Controllers.api
 {
     [Route("api/[controller]")]
-    public class SessionController : Controller
+    public class UsersController : Controller
     {
-
         private readonly UserManager<User> userManager;
-        private readonly SignInManager<User> loginManager;
         private readonly RoleManager<Role> roleManager;
 
-        public SessionController(UserManager<User> _userManager, SignInManager<User> _loginManager, RoleManager<Role> _roleManager)
+        public UsersController(UserManager<User> _userManager, RoleManager<Role> _roleManager)
         {
             userManager = _userManager;
-            loginManager = _loginManager;
             roleManager = _roleManager;
         }
 
@@ -39,11 +39,26 @@ namespace CTA.Controllers.api
             return BadRequest(Json(new { status = "Error", description = ErrorMessage }));
         }
 
+        [HttpGet]
+        public IEnumerable<UserDTO> GetAll()
+        {
+            Mapper.Initialize(config => config.CreateMap<User, UserDTO>());
+            var users = Mapper.Map<IQueryable<User>, IEnumerable<UserDTO>>(userManager.Users);
+            return users;
+        }
+
+        [HttpGet("{id}")]
+        public UserDTO GetUser(string id)
+        {
+            User user = userManager.FindByIdAsync(id).Result;
+            Mapper.Initialize(config => config.CreateMap<User, UserDTO>());
+            return Mapper.Map<User, UserDTO>(user);
+        }
+
         [HttpPost]
-        [Route("")]
         public ActionResult Register(RegisterUserModel user)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 User _user = new User()
                 {
@@ -55,9 +70,9 @@ namespace CTA.Controllers.api
                 };
                 IdentityResult result = userManager.CreateAsync(_user, user.Password).Result;
 
-                if(result.Succeeded)
+                if (result.Succeeded)
                 {
-                    if(!roleManager.RoleExistsAsync("User").Result)
+                    if (!roleManager.RoleExistsAsync("User").Result)
                     {
                         Role role = new Role()
                         {
@@ -65,40 +80,17 @@ namespace CTA.Controllers.api
                             Description = "Simple user"
                         };
                         IdentityResult roleResult = roleManager.CreateAsync(role).Result;
-                        if(!roleResult.Succeeded)
+                        if (!roleResult.Succeeded)
                         {
                             //ModelState.AddModelError("", "Error while creating role!");
                             return SendBad(roleResult.Errors);
                         }
                     }
                     userManager.AddToRoleAsync(_user, "User").Wait();
-                    return Created("",Json(_user));
+                    return Created("", Json(_user));
                 }
             }
             return SendBad((new IdentityError { Code = "Error Model", Description = "Error in user definition" }));
         }
-
-        [HttpPost]
-        [Route("Authorization")]
-        public ActionResult Login(LoginUserModel user)
-        {
-            if(ModelState.IsValid)
-            {
-                var result = loginManager.PasswordSignInAsync(user.UserName, user.Password, user.RememberMe, false).Result;
-                if (result.Succeeded)
-                {
-                    return Ok(Json(new { status="OK"}));
-                }
-            }
-            return SendBad(new IdentityError { Code = "Error model", Description = "Error in login model" });
-        }
-
-        [HttpDelete]
-        public IActionResult LogOff()
-        {
-            loginManager.SignOutAsync().Wait();
-            return Ok(Json(new { status = "OK" }));
-        }
-
     }
 }
