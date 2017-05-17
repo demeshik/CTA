@@ -38,7 +38,7 @@ namespace CTA
                 options.Password.RequireDigit = false;
                 options.Password.RequireUppercase = false;
                 })
-                .AddEntityFrameworkStores<DBContext,int>()
+                .AddEntityFrameworkStores<Context.DBContext,int>()
                 .AddDefaultTokenProviders();
             
             services.AddMvc();

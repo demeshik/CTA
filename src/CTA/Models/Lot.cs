@@ -16,6 +16,9 @@ namespace CTA.Models
         [DataType(DataType.Currency)]
         public int MaxBid { get; set; }
 
+        public int? UserId { get; set; }
+        public User User { get; set; }
+
         public ICollection<Bid> Bids { get; set; }
         public Lot()
         {

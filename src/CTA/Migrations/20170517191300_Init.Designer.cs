@@ -8,8 +8,8 @@ using CTA.Context;
 namespace CTA.Migrations
 {
     [DbContext(typeof(Context.DBContext))]
-    [Migration("20170516192932_AddingModels")]
-    partial class AddingModels
+    [Migration("20170517191300_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -50,7 +50,11 @@ namespace CTA.Migrations
 
                     b.Property<string>("Title");
 
+                    b.Property<int?>("UserId");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Lots");
                 });
@@ -105,6 +109,8 @@ namespace CTA.Migrations
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
 
+                    b.Property<string>("Name");
+
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256);
 
@@ -118,6 +124,8 @@ namespace CTA.Migrations
                     b.Property<bool>("PhoneNumberConfirmed");
 
                     b.Property<string>("SecurityStamp");
+
+                    b.Property<string>("Surname");
 
                     b.Property<bool>("TwoFactorEnabled");
 
@@ -225,6 +233,13 @@ namespace CTA.Migrations
 
                     b.HasOne("CTA.Models.User", "User")
                         .WithMany()
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("CTA.Models.Lot", b =>
+                {
+                    b.HasOne("CTA.Models.User", "User")
+                        .WithMany("Lots")
                         .HasForeignKey("UserId");
                 });
 

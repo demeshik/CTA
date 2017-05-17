@@ -5,22 +5,18 @@ using CTA.Models;
 using CTA.ViewModels;
 using AutoMapper;
 using CTA.DTO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CTA.Controllers.api
 {
     [Route("api/[controller]")]
     public class SessionController : Controller
     {
-
-        private readonly UserManager<User> userManager;
         private readonly SignInManager<User> loginManager;
-        private readonly RoleManager<Role> roleManager;
 
-        public SessionController(UserManager<User> _userManager, SignInManager<User> _loginManager, RoleManager<Role> _roleManager)
+        public SessionController(SignInManager<User> _loginManager)
         {
-            userManager = _userManager;
             loginManager = _loginManager;
-            roleManager = _roleManager;
         }
 
         private ActionResult SendBad(IdentityError identityError)
@@ -40,46 +36,6 @@ namespace CTA.Controllers.api
         }
 
         [HttpPost]
-        [Route("")]
-        public ActionResult Register(RegisterUserModel user)
-        {
-            if(ModelState.IsValid)
-            {
-                User _user = new User()
-                {
-                    UserName = user.UserName,
-                    Email = user.Email,
-                    Country = user.Country,
-                    City = user.City,
-                    CreditCard = user.CreditCard
-                };
-                IdentityResult result = userManager.CreateAsync(_user, user.Password).Result;
-
-                if(result.Succeeded)
-                {
-                    if(!roleManager.RoleExistsAsync("User").Result)
-                    {
-                        Role role = new Role()
-                        {
-                            Name = "User",
-                            Description = "Simple user"
-                        };
-                        IdentityResult roleResult = roleManager.CreateAsync(role).Result;
-                        if(!roleResult.Succeeded)
-                        {
-                            //ModelState.AddModelError("", "Error while creating role!");
-                            return SendBad(roleResult.Errors);
-                        }
-                    }
-                    userManager.AddToRoleAsync(_user, "User").Wait();
-                    return Created("",Json(_user));
-                }
-            }
-            return SendBad((new IdentityError { Code = "Error Model", Description = "Error in user definition" }));
-        }
-
-        [HttpPost]
-        [Route("Authorization")]
         public ActionResult Login(LoginUserModel user)
         {
             if(ModelState.IsValid)
@@ -94,6 +50,7 @@ namespace CTA.Controllers.api
         }
 
         [HttpDelete]
+        [Authorize]
         public IActionResult LogOff()
         {
             loginManager.SignOutAsync().Wait();
