@@ -10,26 +10,25 @@ using AutoMapper;
 using CTA.DTO;
 using CTA.Context;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CTA.Controllers.api
 {
     [Route("api/[controller]")]
     public class UsersController : Controller
     {
-        private readonly DBContext context;
         private readonly UserManager<User> userManager;
         private readonly RoleManager<Role> roleManager;
 
-        public UsersController(UserManager<User> _userManager, RoleManager<Role> _roleManager, DBContext _context)
+        public UsersController(UserManager<User> _userManager, RoleManager<Role> _roleManager)
         {
             userManager = _userManager;
             roleManager = _roleManager;
-            context = _context;
         }
 
         private ActionResult SendBad(IdentityError identityError)
         {
-            return BadRequest(Json(new { status = "Error", description = identityError.Description }));
+            return BadRequest(new { status = "Error", description = identityError.Description });
         }
         private ActionResult SendBad(IEnumerable<IdentityError> Errors)
         {
@@ -40,7 +39,7 @@ namespace CTA.Controllers.api
             }
             ErrorMessage.Remove(ErrorMessage.Length - 1, 1);
             ErrorMessage += ".";
-            return BadRequest(Json(new { status = "Error", description = ErrorMessage }));
+            return BadRequest(new { status = "Error", description = ErrorMessage });
         }
 
         [HttpGet]
@@ -51,20 +50,17 @@ namespace CTA.Controllers.api
             return users;
         }
 
-        [HttpGet("{id}")]
-        public UserDTO GetUserById(string id)
+        [HttpGet("{key}")]
+        public UserDTO GetUserById(string key)
         {
-            User user = userManager.FindByIdAsync(id).Result;
+            int _id;
+            Models.User _user = null;
+            if (int.TryParse(key, out _id)) 
+                _user = userManager.FindByIdAsync(key).Result;
+            else
+                _user = userManager.FindByNameAsync(key).Result;
             Mapper.Initialize(config => config.CreateMap<User, UserDTO>());
-            return Mapper.Map<User, UserDTO>(user);
-        }
-
-        [HttpGet("{username}")]
-        public UserDTO GetUserByUsername(string username)
-        {
-            User user = userManager.FindByNameAsync(username).Result;
-            Mapper.Initialize(config => config.CreateMap<User, UserDTO>());
-            return Mapper.Map<User, UserDTO>(user);
+            return Mapper.Map<User, UserDTO>(_user);
         }
 
         [HttpGet("{id}/lots")]
@@ -89,7 +85,7 @@ namespace CTA.Controllers.api
                 User _user = new User()
                 {
                     UserName = user.UserName,
-                    Name = user.UserName,
+                    Name = user.Name,
                     Surname = user.Surname,
                     PhoneNumber = user.PhoneNumber,
                     Email = user.Email,
@@ -115,10 +111,37 @@ namespace CTA.Controllers.api
                     }
                     userManager.AddToRoleAsync(_user, "User").Wait();
                     Mapper.Initialize(config => config.CreateMap<User, UserDTO>());
-                    return Created($"/api/users/{_user.UserName}", Json(Mapper.Map<User, UserDTO>(_user)));
+                    return Created($"/api/users/{_user.UserName}", Mapper.Map<User, UserDTO>(_user));
                 }
+                else
+                    return SendBad(result.Errors);
             }
             return SendBad((new IdentityError { Code = "Error Model", Description = "Error in user definition" }));
+        }
+
+        [HttpPut]
+        [Authorize]
+        public ActionResult Update(RegisterUserModel user)
+        {
+            
+        }
+
+        [HttpDelete]
+        [Authorize(Roles="Admin")]
+        public ActionResult Delete(string id)
+        {
+            IdentityResult result = null;
+            User user = userManager.FindByIdAsync(id).Result;
+            if (user != null)
+                result = userManager.DeleteAsync(user).Result;
+            else
+                return NotFound();
+            if (result.Succeeded)
+            {
+                return Ok(new { status = "OK" });
+            }
+            else
+                return StatusCode(500, new { status = "Error", description = "Error has occured during removal of the user" });
         }
     }
 }
