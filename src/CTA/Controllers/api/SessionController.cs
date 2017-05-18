@@ -36,17 +36,18 @@ namespace CTA.Controllers.api
         }
 
         [HttpPost]
-        public ActionResult Login(LoginUserModel user)
+        public ActionResult Login([FromBody]LoginUserModel user)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 var result = loginManager.PasswordSignInAsync(user.UserName, user.Password, user.RememberMe, false).Result;
                 if (result.Succeeded)
-                {
-                    return Ok(Json(new { status="OK"}));
-                }
+                    return Ok(new { status = "OK" });
+                else
+                    return BadRequest(new { description = "Введенные данные неверны" });
             }
-            return SendBad(new IdentityError { Code = "Error model", Description = "Error in login model" });
+            else
+                return BadRequest(new { description = "Введенные данные неверны" });
         }
 
         [HttpDelete]
@@ -54,7 +55,7 @@ namespace CTA.Controllers.api
         public IActionResult LogOff()
         {
             loginManager.SignOutAsync().Wait();
-            return Ok(Json(new { status = "OK" }));
+            return Ok(new { status = "OK" });
         }
 
     }

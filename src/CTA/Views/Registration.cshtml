@@ -1,0 +1,43 @@
+﻿@model CTA.ViewModels.LoginUserModel
+@{
+    ViewBag.Title = "Авторизация";
+}
+ <div>
+    <label>Введите username</label><br />
+    <input type="text" id="username" /> <br /><br />
+    <label>Введите пароль</label><br />
+    <input type="password" id="password" /><br /><br />
+    <label>Запомнить меня</label><br />
+    <input type="checkbox" id="remeber" /><br /><br />
+    <input type="submit" id="submit" value="Регистрация" />
+</div> 
+
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+            $('#submit').click(function (e) {
+                e.preventDefault();
+                var data = {
+                    UserName: $('#username').val(),
+                    Password: $('#password').val(),
+                    RememberMe: $('#remember').val()
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/api/session',
+                    contentType: 'application/json;charset=utf-8',
+                    data: JSON.stringify(data)
+                }).success(function (dat) {
+                    var answer = JSON.parse(dat);
+                    alert(answer.value.status);
+                }).fail(function (err) {
+                    alert(answer.value.description);
+                });
+            })
+
+        })
+    </script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+}

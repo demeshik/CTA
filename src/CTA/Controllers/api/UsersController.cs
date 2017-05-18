@@ -121,12 +121,29 @@ namespace CTA.Controllers.api
 
         [HttpPut]
         [Authorize]
-        public ActionResult Update(RegisterUserModel user)
+        public ActionResult Update(UpdateUserModel _user)
         {
+            User user = userManager.FindByNameAsync(User.Identity.Name).Result;
+            user.Name = _user.Name;
+            user.UserName = _user.UserName;
+            user.City = _user.City;
+            user.Country = _user.Country;
+            user.CreditCard = _user.CreditCard;
+            user.Email = _user.Email;
+            user.PhoneNumber = _user.PhoneNumber;
+            user.Surname = _user.Surname;
+
+            IdentityResult result = userManager.UpdateAsync(user).Result;
+            if (result.Succeeded)
+            {
+                return Ok(new { status = "Updated" });
+            }
+            else
+                return StatusCode(500, new { status = "Error", description = "User updated error" });
             
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         [Authorize(Roles="Admin")]
         public ActionResult Delete(string id)
         {
