@@ -21,6 +21,6 @@ function getimage() {
 
         caption.html(header);
 
-        mainDiv.appendTo($('.row'));
+        mainDiv.appendTo($('.row.contents'));
     }
 }

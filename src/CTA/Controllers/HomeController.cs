@@ -19,9 +19,7 @@ namespace CTA.Controllers
         }
         public IActionResult Index()
         {
-            Account account = new Account(config.Value.CloudName, config.Value.ApiKey, config.Value.ApiSecret);
-            Cloudinary cloud = new Cloudinary(account);
-            return View(cloud);
+            return View();
         }
 
         public IActionResult About()

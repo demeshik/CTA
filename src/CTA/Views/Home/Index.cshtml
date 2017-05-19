@@ -1,17 +1,58 @@
-﻿@{
+﻿@model CTA.DTO.UserDTO
+@{
     ViewData["Title"] = "Home Page";
 }
 
+
+@section login
+{
+        @if (User.Identity.Name != null)
+        {
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <p class="navbar-text">Добро пожаловать, пользователь!</p>
+                </li>
+            </ul>
+        }
+        else
+        {
+            @Html.Partial("LoginPartial");
+        }
+}
+               
+
 <div id="con" onclick="getimage()">
-
     Тут будет картинка:)
-
 </div>
-<div class="row">
+<div class="row contents">
 </div>
 
 @section scripts
 {
+    <script type="text/javascript">
+        $(function () {
+            $('.btn.btn-primary.btn-block').click(function (e) {
+                e.preventDefault();
+                var data = {
+                    UserName: $('#username').val(),
+                    Password: $('#password').val(),
+                    RememberMe: true
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/api/session',
+                    contentType: 'application/json;charset=utf-8',
+                    data: JSON.stringify(data)
+                }).success(function (dat) {
+                    location.reload();
+                }).fail(function (err) {
+                    alert(answer.value.description);
+                });
+            })
+
+        })
+    </script>
     <script type="text/javascript" src="/js/jquery.cloudinary.js"></script>
-    <script type="text/javascript" src="/js/lotsLoader.js"></script>
+    <script type="text/javascript" src="/js/lots-loader.js"></script>
 }
