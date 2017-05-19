@@ -1,16 +1,12 @@
-﻿using System;
+﻿using AutoMapper;
+using CTA.DTO;
+using CTA.Models;
+using CTA.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using CTA.ViewModels;
-using CTA.Models;
-using Microsoft.AspNetCore.Identity;
-using AutoMapper;
-using CTA.DTO;
-using CTA.Context;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authorization;
 
 namespace CTA.Controllers.api
 {
@@ -63,6 +59,7 @@ namespace CTA.Controllers.api
             return Mapper.Map<User, UserDTO>(_user);
         }
 
+        //[Authorize]
         [HttpGet("{id}/lots")]
         public IEnumerable<Lot> GetUserLots(string id)
         {
@@ -70,6 +67,7 @@ namespace CTA.Controllers.api
             return user.Lots;
         }
 
+        //[Authorize]
         [HttpGet("{id}/bids")]
         public IEnumerable<Bid> GetUserBids(string id)
         {

@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using CTA.Context;
 using CTA.Models;
+using CTA.DTO;
 
 namespace CTA
 {
@@ -42,6 +43,7 @@ namespace CTA
                 .AddDefaultTokenProviders();
             
             services.AddMvc();
+            services.Configure<AppConfig>(Configuration.GetSection("Cloudinary"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

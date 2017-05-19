@@ -1,6 +1,13 @@
 ﻿@model CTA.ViewModels.LoginUserModel
 @{
-    ViewBag.Title = "Авторизация";
+    if (User.Identity.Name !=null)
+    {
+        ViewBag.Title = $"Hello, {User.Identity.Name}";
+    }
+    else
+    {
+        ViewBag.Title = $"Hello, Anonym";
+    }
 }
  <div>
     <label>Введите username</label><br />
