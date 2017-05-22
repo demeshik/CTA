@@ -22,6 +22,7 @@ namespace CTA.ViewModels
         public string PhoneNumber { get; set; }
         [Required]
         [DataType(DataType.Password)]
+        [Compare("Password",ErrorMessage ="Passwords should be the same!")]
         public string ConfirmPassword { get; set; }
         [Required]
         [DataType(DataType.EmailAddress)]

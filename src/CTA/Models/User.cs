@@ -13,6 +13,7 @@ namespace CTA.Models
         public string Country { get; set; }
         public string City { get; set; }
         public string CreditCard { get; set; }
+        public string Image { get; set; }
         public ICollection<Lot> Lots { get; set; }
         public ICollection<Bid> Bids { get; set; }
         public User()

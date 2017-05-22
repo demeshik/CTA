@@ -1,9 +1,8 @@
 ﻿$.cloudinary.config({ cloud_name: 'djrazor308', api_key: '699756615932382' })
 
-function getimage() {
 
-    for (var i = 0; i < 12; i++)
-    {
+$('#con').click(function (e) {
+    for (var i = 0; i < 12; i++) {
         var mainDiv = $('<div />', { "class": 'col-sm-6 col-md-4' });
         var thumbnail = $('<div />', { "class": 'thumbnail' });
         var caption = $('<div />', { "class": 'caption' });
@@ -23,4 +22,9 @@ function getimage() {
 
         mainDiv.appendTo($('.row.contents'));
     }
-}
+})
+
+/*function getimage() {
+
+
+}*/

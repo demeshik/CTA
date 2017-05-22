@@ -114,7 +114,7 @@ namespace CTA.Controllers.api
                 else
                     return SendBad(result.Errors);
             }
-            return SendBad((new IdentityError { Code = "Error Model", Description = "Error in user definition" }));
+            return BadRequest(ModelState);
         }
 
         [HttpPut]

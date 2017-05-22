@@ -1,0 +1,151 @@
+﻿
+
+<form class="form-horizontal">
+    <fieldset>
+
+        <!-- Form Name -->
+        <legend>Регистрация</legend>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="username">Username:</label>
+            <div class="col-md-4">
+                <input name="username" class="form-control input-md" id="username" required="" type="text" placeholder="Username">
+
+            </div>
+        </div>
+
+        <!-- Password input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="password">Password:</label>
+            <div class="col-md-4">
+                <input name="password" class="form-control input-md" id="password" required="" type="password" placeholder="Password">
+
+            </div>
+        </div>
+
+        <!-- Password input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="confirmpassword">Confirm password:</label>
+            <div class="col-md-4">
+                <input name="confirmpassword" class="form-control input-md" id="confirmpassword" required="" type="password" placeholder="Confirm password">
+
+            </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="name">Name:</label>
+            <div class="col-md-4">
+                <input name="name" class="form-control input-md" id="name" required="" type="text" placeholder="Name">
+
+            </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="surname">Surname:</label>
+            <div class="col-md-4">
+                <input name="surname" class="form-control input-md" id="surname" required="" type="text" placeholder="Surname">
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="email">Email:</label>
+            <div class="col-md-4">
+                <input name="email" class="form-control input-md" id="email" required="" type="text" placeholder="Email">
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="phone">Phone:</label>
+            <div class="col-md-4">
+                <input name="phone" class="form-control input-md" id="phone" required="" type="text" placeholder="Phone">
+
+            </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="country">Country:</label>
+            <div class="col-md-4">
+                <input name="country" class="form-control input-md" id="country" required="" type="text" placeholder="Country">
+
+            </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="city">City:</label>
+            <div class="col-md-4">
+                <input name="city" class="form-control input-md" id="city" required="" type="text" placeholder="City">
+
+            </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="credit">Credit Card:</label>
+            <div class="col-md-4">
+                <input name="credit" class="form-control input-md" id="credit" required="" type="text" placeholder="Number">
+
+            </div>
+        </div>
+
+        <!-- File Button -->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="image">Avatar:</label>
+            <div class="col-md-4">
+                <input name="image" class="input-file" id="image" type="file">
+            </div>
+        </div>
+
+        <!-- Button (Double) -->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="submit"></label>
+            <div class="col-md-8">
+                <button name="submit" class="btn btn-success" id="submit">Submit</button>
+                <button name="cancel" class="btn btn-danger" id="cancel">Cancel</button>
+            </div>
+        </div>
+
+    </fieldset>
+</form>
+
+
+@section scripts
+{
+<script type="text/javascript">
+        $(function () {
+            $('.btn.btn-success').click(function (e) {
+                e.preventDefault();
+                var data = {
+                    UserName: $('#username').val(),
+                    Password: $('#password').val(),
+                    Name: $('#name').val(),
+                    ConfirmPassword: $('#confirmpassword').val(),
+                    Surname: $('#surname').val(),
+                    Email: $('#email').val(),
+                    PhoneNumber: $('#phone').val(),
+                    Country: $('#country').val(),
+                    City: $('#city').val(),
+                    CreditCard:$('#credit').val()
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/api/users',
+                    contentType: 'application/json;charset=utf-8',
+                    data: JSON.stringify(data)
+                }).success(function (dat) {
+                    console.log(dat);
+                }).fail(function (err) {
+                    console.log(err);
+                });
+            })
+
+        })
+</script>
+}
