@@ -4,8 +4,6 @@
     color:white;
 }
 
-/* Wrapping element */
-/* Set some basic padding to keep content from hitting the edges */
 .body-content {
     padding-left: 15px;
     padding-right: 15px;
@@ -18,16 +16,55 @@ textarea {
     max-width: 280px;
 }
 
-/* Carousel */
-.carousel-caption p {
-    font-size: 20px;
-    line-height: 1.4;
+#login-dp {
+    color:black;
+    min-width: 250px;
+    padding: 14px 14px 0;
+    overflow: hidden;
+    background-color: rgba(255,255,255,.8);
 }
 
-/* Make .svg files in the carousel display properly in older browsers */
-.carousel-inner .item img[src$=".svg"]
-{
-    width: 100%;
+    #login-dp .help-block {
+        font-size: 12px;
+    }
+
+    #login-dp .bottom {
+        background-color: rgba(255,255,255,.8);
+        border-top: 1px solid #ddd;
+        clear: both;
+        padding: 14px;
+    }
+
+    #login-dp .form-group {
+        margin-bottom: 10px;
+    }
+
+
+@media screen and (max-width:767px) {
+    .carousel-caption {
+        display: none;
+    }
+}
+
+#quick-nav {
+    min-width: 250px;
+    padding: 14px 14px 0;
+    overflow: hidden;
+    background-color: rgba(255,255,255,.3);
+}
+#quick-nav .form-group {
+    margin-bottom: 10px;
+    background-color: rgba(255,255,255,1);
+}
+
+#account-button:hover, #logout:hover{
+    color:black;
+}
+
+@media screen and (max-width:767px) {
+    .carousel-caption {
+        display: none;
+    }
 }
 
 /* Hide/rearrange for smaller screens */

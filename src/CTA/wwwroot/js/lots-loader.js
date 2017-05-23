@@ -22,9 +22,4 @@ $('#con').click(function (e) {
 
         mainDiv.appendTo($('.row.contents'));
     }
-})
-
-/*function getimage() {
-
-
-}*/
+});
