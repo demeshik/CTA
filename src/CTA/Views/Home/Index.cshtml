@@ -27,34 +27,6 @@
 
 @section scripts
 {
-    <link href="/css/noty.css" rel="stylesheet" />
     <script type="text/javascript" src="/js/jquery.cloudinary.js"></script>
     <script type="text/javascript" src="/js/lots-loader.js"></script>
-    <script src="/js/noty.js" type="text/javascript"></script>
-    <script type="text/javascript">
-        $('#sign-in').click(function (e) {
-            e.preventDefault();
-
-            new Noty({
-                text: 'Some notification text'
-            }).show();
-            
-            /*  var data = {
-                  UserName: $('#username').val(),
-                  Password: $('#password').val(),
-                  RememberMe: true
-              };
-      
-              $.ajax({
-                  type: 'POST',
-                  url: '/api/session',
-                  contentType: 'application/json;charset=utf-8',
-                  data: JSON.stringify(data)
-              }).success(function (dat) {
-                  location.reload();
-              }).fail(function (err) {
-                  alert(err.value.description);
-              });*/
-        });
-    </script>
 }

@@ -1,6 +1,9 @@
 ﻿@using CloudinaryDotNet
 @model Cloudinary
 
+@{
+    ViewData["Title"] = "Registration";
+}
 
 <form class="form-horizontal">
     <fieldset>
@@ -83,12 +86,12 @@
             </div>
         </div>
 
-        <input type="hidden" id="image_id" name="image_id" />
+        <input type="hidden" value="" id="image_id" name="image_id" />
 
         <div class="form-group">
             <label class="col-md-4 control-label" for="submit"></label>
             <div class="col-md-8">
-                <button name="submit" class="btn btn-success" id="submit">Submit</button>
+                <button name="submit" class="btn btn-success" id="signup">Submit</button>
                 <button name="cancel" class="btn btn-danger" id="cancel">Cancel</button>
             </div>
         </div>
@@ -98,6 +101,7 @@
 
 @section scripts
 {
+
 <script type="text/javascript">
     $(function () {
         $('.btn.btn-success').click(function (e) {
@@ -135,5 +139,14 @@
             $("input.cloudinary-fileupload[type=file]").cloudinary_fileupload();
         }
     });
+</script>
+<script>
+    
+
+    $('.cloudinary_fileupload').bind('fileuploaddone', function (e, data) {
+            new Noty({
+                text: 'test'
+            });
+        });
 </script>
 }

@@ -6,6 +6,7 @@ using CTA.ViewModels;
 using AutoMapper;
 using CTA.DTO;
 using Microsoft.AspNetCore.Authorization;
+using CTA.Utils;
 
 namespace CTA.Controllers.api
 {
@@ -44,10 +45,10 @@ namespace CTA.Controllers.api
                 if (result.Succeeded)
                     return Ok(new { status = "OK" });
                 else
-                    return BadRequest(new { description = "Введенные данные неверны" });
+                    return StatusCode(401, new { description = "Введенные данные неверны" });
             }
             else
-                return BadRequest(new { description = "Введенные данные неверны" });
+                return StatusCode(400,new { Errors = ModelState.Errors() });
         }
 
         [HttpDelete]

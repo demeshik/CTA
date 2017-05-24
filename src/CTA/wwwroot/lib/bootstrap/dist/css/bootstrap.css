@@ -11,21 +11,9 @@ html {
 }
 body {
     padding: 0;
-    background:url('../../../../images/background.jpg') repeat;
 }
 
 
-@media(max-width:768px) {
-    #login-dp {
-        background-color: inherit;
-        color: #fff;
-    }
-
-        #login-dp .bottom {
-            background-color: inherit;
-            border-top: 0 none;
-        }
-}
 article,
 aside,
 details,

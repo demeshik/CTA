@@ -2,6 +2,11 @@
     padding-top: 50px;
     padding-bottom: 20px;
     color:white;
+    background:url('../../../../images/background.jpg') repeat;
+}
+
+legend{
+    color:white;
 }
 
 .body-content {
@@ -16,8 +21,18 @@ textarea {
     max-width: 280px;
 }
 
-#login-dp {
-    color:black;
+#custom-bootstrap-menu {
+    background: url('../../../../images/background.jpg') repeat;
+}
+
+    #custom-bootstrap-menu.navbar-default .navbar-nav > li > a, .nav > .navbar-nav > .navbar-right, .nav > .navbar-nav > .navbar-right > .navbar-text {
+        color: rgba(255, 255, 255, 1);
+    }
+
+    
+    
+    #login-dp {
+    color: black;
     min-width: 250px;
     padding: 14px 14px 0;
     overflow: hidden;
@@ -61,16 +76,27 @@ textarea {
     color:black;
 }
 
-@media screen and (max-width:767px) {
-    .carousel-caption {
-        display: none;
+@media(max-width:768px) {
+    #login-dp {
+        background-color: inherit;
+        color: #fff;
     }
-}
 
-/* Hide/rearrange for smaller screens */
-@media screen and (max-width: 767px) {
-  /* Hide captions */
-  .carousel-caption {
-    display: none
-  }
-}
+        #login-dp .bottom {
+            background-color: inherit;
+            border-top: 0 none;
+        }
+
+    @media screen and (max-width:767px) {
+        .carousel-caption {
+            display: none;
+        }
+    }
+
+    /* Hide/rearrange for smaller screens */
+    @media screen and (max-width: 767px) {
+        /* Hide captions */
+        .carousel-caption {
+            display: none;
+        }
+    }
