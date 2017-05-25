@@ -142,12 +142,14 @@
     });
 </script>
 <script>
-    
 
-    $('.cloudinary_fileupload').bind('fileuploaddone', function (e, data) {
-            new Noty({
-                text: 'test'
-            });
-        });
+    $.fn.imageupload("#image_id", function ()
+    {
+        new Noty({
+            text: 'Image Uploaded'
+
+        }).show();
+
+    })
 </script>
 }

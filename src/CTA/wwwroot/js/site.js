@@ -45,6 +45,17 @@ $('#logout').click(function (e) {
         url: '/api/session',
         contentType: 'application/json;charset=utf-8'
     }).success(function (dat) {
-            location.reload();
-        }).fail
-})
+        location.reload();
+    }).fail
+});
+
+$.fn.imageupload = function (selector, callback) {
+    var input = $(selector);
+    var oldvalue = input.val();
+    setInterval(function () {
+        if (input.val() != oldvalue) {
+            oldvalue = input.val();
+            callback();
+        }
+    }, 100);
+};
