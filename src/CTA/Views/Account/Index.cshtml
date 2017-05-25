@@ -1,0 +1,40 @@
+﻿@model CTA.DTO.UserDTO
+
+@section login{
+    @Html.Partial("UserCabPartial")
+}
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Свойство</th>
+            <th>Значение</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th>Имя</th>
+            <th>@Model.Name</th>
+        </tr>
+        <tr>
+            <th>Фамилия</th>
+            <th>@Model.Surname</th>
+        </tr>
+        <tr>
+            <th>Имя пользователя</th>
+            <th>@Model.UserName</th>
+        </tr>
+        <tr>
+            <th>Страна</th>
+            <th>@Model.Country</th>
+        </tr>
+        <tr>
+            <th>Город</th>
+            <th>@Model.City</th>
+        </tr>
+        <tr>
+            <th>Номер телефона</th>
+            <th>@Model.PhoneNumber</th>
+        </tr>
+    </tbody>
+</table>
