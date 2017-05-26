@@ -103,36 +103,6 @@
 @section scripts
 {
 
-<script type="text/javascript">
-    $(function () {
-        $('.btn.btn-success').click(function (e) {
-            var data = {
-                UserName: $('#username').val(),
-                Password: $('#password').val(),
-                Name: $('#name').val(),
-                ConfirmPassword: $('#confirmpassword').val(),
-                Surname: $('#surname').val(),
-                Email: $('#email').val(),
-                PhoneNumber: $('#phone').val(),
-                Country: $('#country').val(),
-                City: $('#city').val(),
-                CreditCard: $('#credit').val()
-            };
-
-            $.ajax({
-                type: 'POST',
-                url: '/api/users',
-                contentType: 'application/json;charset=utf-8',
-                data: JSON.stringify(data)
-            }).success(function (dat) {
-                console.log(dat);
-            }).fail(function (err) {
-                console.log(err);
-            });
-        })
-
-    });
-</script>
 @Model.GetCloudinaryJsConfig(true, @"/js/")
 <script type="text/javascript">
     $(function () {
@@ -143,11 +113,12 @@
 </script>
 <script>
 
-    $.fn.imageupload("#image_id", function ()
-    {
-        new Noty({
-            text: 'Image Uploaded'
+    $(this).bind("cloudinarydone", function (e, data) {
 
+        $('.cloudinary-fileupload').attr("value", data.result.public_id.toString());
+
+        new Noty({
+            text: 'Image uploaded'
         }).show();
 
     })

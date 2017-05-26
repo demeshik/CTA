@@ -76,7 +76,7 @@ namespace CTA.Controllers.api
         }
 
         [HttpPost]
-        public ActionResult Register(RegisterUserModel user)
+        public ActionResult Register([FromBody]RegisterUserModel user)
         {
             if (ModelState.IsValid)
             {

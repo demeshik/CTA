@@ -32,6 +32,8 @@ namespace CTA.ViewModels
         [Required]
         public string City { get; set; }
         [Required]
+        public string Image { get; set; }
+        [Required]
         [DataType(DataType.CreditCard)]
         public string CreditCard { get; set; }
     }

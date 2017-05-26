@@ -45,17 +45,46 @@ $('#logout').click(function (e) {
         url: '/api/session',
         contentType: 'application/json;charset=utf-8'
     }).success(function (dat) {
-        location.reload();
-    }).fail
+        window.location.replace("/");
+    });
 });
 
-$.fn.imageupload = function (selector, callback) {
-    var input = $(selector);
-    var oldvalue = input.val();
-    setInterval(function () {
-        if (input.val() != oldvalue) {
-            oldvalue = input.val();
-            callback();
+$('#signup').click(function (e) {
+    e.preventDefault();
+
+
+    /////
+    // Image: $('.cloudinary-fileupload').attr('value'); !!!!!!!!!
+    /////
+    var data = {
+        UserName: $('#username').val(),
+        Password: $('#password').val(),
+        Name: $('#name').val(),
+        ConfirmPassword: $('#confirmpassword').val(),
+        Surname: $('#surname').val(),
+        Email: $('#email').val(),
+        Image: $('.cloudinary-fileupload').val(),
+        PhoneNumber: $('#phone').val(),
+        Country: $('#country').val(),
+        City: $('#city').val(),
+        CreditCard: $('#credit').val()
+    };
+    $.ajax({
+        type: 'POST',
+        url: '/api/users',
+        contentType: 'application/json;charset=utf-8',
+        data: JSON.stringify(data)
+    }).success(function (dat) {
+        new Noty({
+            text: 'All is good! Now you can login by your username and password'
+        }).show();
+    }).fail(function (err) {
+        var errs = JSON.parse(err.responseText).errors;
+        for (var i = 0; i < errs.length; i++) {
+            new Noty({
+                type: 'error',
+                text: errs[i].key + ": " + errs[i].value[0]
+            }).show();
         }
-    }, 100);
-};
+    });
+})
