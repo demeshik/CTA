@@ -36,7 +36,7 @@ textarea {
     min-width: 250px;
     padding: 14px 14px 0;
     overflow: hidden;
-    background-color: rgba(255,255,255,.8);
+    background-color: rgba(255,255,255,1);
 }
 
     #login-dp .help-block {
@@ -44,14 +44,14 @@ textarea {
     }
 
     #login-dp .bottom {
-        background-color: rgba(255,255,255,.8);
+        background-color: rgba(255,255,255,1);
         border-top: 1px solid #ddd;
         clear: both;
         padding: 14px;
     }
 
     #login-dp .form-group {
-        margin-bottom: 10px;
+        /*margin-bottom: 10px;*/
     }
 
 
@@ -62,13 +62,12 @@ textarea {
 }
 
 #quick-nav {
-    min-width: 250px;
-    padding: 14px 14px 0;
+    min-width: inherit;
     overflow: hidden;
-    background-color: rgba(255,255,255,.3);
+    background-color: rgba(255,255,255,1);
 }
 #quick-nav .form-group {
-    margin-bottom: 10px;
+    margin-bottom: 6px;
     background-color: rgba(255,255,255,1);
 }
 

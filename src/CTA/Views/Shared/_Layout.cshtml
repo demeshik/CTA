@@ -23,7 +23,7 @@
     <div id="custom-bootstrap-menu" class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container">
             <div class="navbar-header">
-                <a class="navbar-brand" href="#">Brand</a>
+                <a class="navbar-brand" href="#">CTA</a>
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-menubuilder">
                     <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
                 </button>
@@ -33,17 +33,36 @@
                     <li>
                         <a href="/">Home</a>
                     </li>
-                    <li>
-                        <a href="/lots" target="_blank">Lots</a>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Lots <span class="caret"></span></a>
+                        <ul id="quick-nav" class="dropdown-menu">
+                            <li>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <form class="form" role="form" accept-charset="UTF-8" id="quick-form">
+                                            <div class="form-group">
+                                                <button id="account-button" type="button" class="btn btn-link btn-sm btn-block"><a href="/account">New</a></button>
+                                            </div>
+                                            <div class="form-group">
+                                                <button id="logout" type="button" class="btn btn-link btn-sm btn-block">Used</button>
+                                            </div>
+                                            <div class="form-group">
+                                                <button id="logout" type="button" class="btn btn-link btn-sm btn-block">Disaster</button>
+                                            </div>
+                                        </form>
+                                        </div>
+                                </div>
+                            </li>
+                        </ul>
                     </li>
                     <li>
-                        <a href="/products">Products</a>
+                        <a href="/products">Users</a>
                     </li>
                     <li>
-                        <a href="/about-us">About Us</a>
+                        <a href="/about-us">About</a>
                     </li>
                     <li>
-                        <a href="/contact">Contact Us</a>
+                        <a href="/contact">Contact</a>
                     </li>
                 </ul>
 
@@ -52,31 +71,6 @@
             </div>
         </div>
     </div>
-
-
-   <!-- <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">CTA</a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
-                </ul>
-            
-       
-
-            </div>
-        </div>
-    </div>-->
 
     
 

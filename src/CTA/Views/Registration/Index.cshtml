@@ -3,7 +3,7 @@
 
 
 @{
-    ViewData["Title"] = "My Account";
+    ViewData["Title"] = "Registration page";
 }
 
 <form class="form-horizontal">
@@ -118,6 +118,7 @@
         $('.cloudinary-fileupload').attr("value", data.result.public_id.toString());
 
         new Noty({
+            type: 'success',
             text: 'Image uploaded'
         }).show();
 

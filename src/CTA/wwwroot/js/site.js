@@ -52,10 +52,6 @@ $('#logout').click(function (e) {
 $('#signup').click(function (e) {
     e.preventDefault();
 
-
-    /////
-    // Image: $('.cloudinary-fileupload').attr('value'); !!!!!!!!!
-    /////
     var data = {
         UserName: $('#username').val(),
         Password: $('#password').val(),
@@ -63,7 +59,7 @@ $('#signup').click(function (e) {
         ConfirmPassword: $('#confirmpassword').val(),
         Surname: $('#surname').val(),
         Email: $('#email').val(),
-        Image: $('.cloudinary-fileupload').val(),
+        Image: $('.cloudinary-fileupload').attr('value'),
         PhoneNumber: $('#phone').val(),
         Country: $('#country').val(),
         City: $('#city').val(),
@@ -76,6 +72,7 @@ $('#signup').click(function (e) {
         data: JSON.stringify(data)
     }).success(function (dat) {
         new Noty({
+            type: 'success',
             text: 'All is good! Now you can login by your username and password'
         }).show();
     }).fail(function (err) {

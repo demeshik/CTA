@@ -48,7 +48,7 @@ namespace CTA.Controllers.api
                     return StatusCode(401, new { description = "Введенные данные неверны" });
             }
             else
-                return StatusCode(400,new { Errors = ModelState.Errors() });
+                return StatusCode(400, new { Errors = ModelState.Errors() });
         }
 
         [HttpDelete]

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CTA.DTO;
 using CTA.Models;
+using CTA.Utils;
 using CTA.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -114,7 +115,7 @@ namespace CTA.Controllers.api
                 else
                     return SendBad(result.Errors);
             }
-            return BadRequest(ModelState);
+            return StatusCode(400, new { Errors = ModelState.Errors() });
         }
 
         [HttpPut]

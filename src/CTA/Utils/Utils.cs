@@ -7,8 +7,16 @@ using System.Threading.Tasks;
 
 namespace CTA.Utils
 {
-    public static class ModelStateHelper
+    public static class Utils
     {
+
+        public enum CarType
+        {
+            New=1,
+            Used=2,
+            Disaster=3
+        }
+
         public static IEnumerable Errors(this ModelStateDictionary modelState)
         {
             if(!modelState.IsValid)
