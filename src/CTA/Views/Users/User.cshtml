@@ -1,10 +1,17 @@
 ﻿@using CloudinaryDotNet
 @model Tuple<CTA.DTO.UserDTO, Cloudinary>
 
-@section login{
-    @Html.Partial("UserCabPartial")
+@section login
+{
+    @if (User.Identity.Name != null)
+    {
+        @Html.Partial("UserCabPartial");
+    }
+    else
+    {
+        @Html.Partial("LoginPartial");
+    }
 }
-
 
 <div class="row">
     <div class="col-sm-3 col-lg-3 col-md-3 col-xs-1">
@@ -17,7 +24,43 @@
         <h3 class="text-left text-success">
             Bids
         </h3>
-        <table class="table table-responsive bids-table">
+        <table class="table table-responsive">
+            <thead>
+                <tr>
+                    <th>
+                        #
+                    </th>
+                    <th>
+                        First Name
+                    </th>
+                    <th>
+                        Last Name
+                    </th>
+                    <th>
+                        Username
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="row">
+
+    <div class="col-sm-9 col-lg-9 col-md-9 col-xs-1">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3 class="text-success text-left">
+                            Lots
+                        </h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <table class="table table-responsive lots-table">
             <thead>
                 <tr>
                     <th>
@@ -34,152 +77,15 @@
                     </th>
                 </tr>
             </thead>
-            <tbody>
-            </tbody>
+            <tbody></tbody>
         </table>
-        <!--<ul id="pagination-bids" class="pagination-sm"></ul>-->
+        <ul id="pagination-bids" class="pagination-sm"></ul>
     </div>
 </div>
-<div class="row">
-    <!--<div class="col-sm-3 col-lg-3 col-md-3 col-xs-1">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <a class="btn btn-default btn-block btn-primary">Change info</a>
-        </div>
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <a class="btn btn-default btn-block btn-primary">Change password</a>
-        </div>
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <a class="btn btn-default btn-block btn-danger">Delete account</a>
-        </div>
-    </div>-->
-    <div class="col-sm-9 col-lg-9 col-md-9 col-xs-1">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="col-md-6">
-                        <h3 class="text-success text-left">
-                            Lots
-                        </h3>
-                    </div>
-                    <div class="col-md-6">
-                        <h3 id="add-lot" data-toggle="modal" class="text-right glyphicon-plus text-primary">
-                            
-                        </h3>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <table class="table table-responsive lots-table">
-            <thead>
-                <tr>
-                    <th>
-                        #
-                    </th>
-                    <th>
-                        Title
-                    </th>
-                    <th>
-                        Expired
-                    </th>
-                    <th>
-                        Link
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
-        <ul id="pagination-demo" class="pagination-sm"></ul>
-    </div>
-</div>
-
-<div id="addLotModal" class="modal fade">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title">Add new lot</h4>
-            </div>
-            <div class="modal-body">
-                <form role="form">
-                    <fieldset>
-                        <div class="form-group">
-                            <label class="col-md-4 control-label" for="new-lot-title">Title:</label>
-                            <input type="text" name="new-lot-title" id="new-lot-title" class="form-control input-lg" placeholder="Title" />
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-4 control-label" for="new-lot-description">Description:</label>
-                            <input type="text" name="new-lot-description" id="new-lot-description" class="form-control input-lg" placeholder="Description" />
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-4 control-label" for="new-lot-expired">Expired date:</label>
-                            <input type="datetime-local" name="new-lot-expired" id="new-lot-expired" value="2014-11-16T15:25:33" class="form-control input-lg" />
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-4 control-label" for="new-lot-minbid">Minimal bid:</label>
-                            <input type="text" name="new-lot-minbid" id="new-lot-minbid" class="form-control input-lg" placeholder="Minimal Bid" />
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-4 control-label">Main Image:</label>
-                            @Model.Item2.Api.BuildUploadForm("new-lot-mainimage", "auto",
-                                new SortedDictionary<string, object>() { { "callback", "~/Content/cloudinary.html" } }, null)
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-4 control-label">Images(can select 2+):</label>
-                            @Model.Item2.Api.BuildUploadForm("new-lot-mainimage", "auto",
-                                new SortedDictionary<string, object>() { { "callback", "~/Content/cloudinary.html" } }, null)
-                        </div>
-                        <input type="hidden" value="" id="new-lot-mainimage" name="new-lot-mainimage" />
-                        <div class="row">
-                            <div class="col-xs-6 col-sm-6 col-md-6">
-                                <input type="submit" id="add-new-lot-button" class="btn btn-lg btn-success btn-block" value="Добавить">
-                            </div>
-                        </div>
-                    </fieldset>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-
 
 @section scripts{
-@Model.Item2.GetCloudinaryJsConfig(true, @"/js/")
-<script type="text/javascript">
-    $(function () {
-        if ($.fn.cloudinary_fileupload !== undefined) {
-            $("input.cloudinary-fileupload[type=file]").cloudinary_fileupload();
-        }
-
-        $.fn.currentUserId = '@Model.Item1.UserName';
-
-    });
-</script>
-<script>
-    $(this).bind("cloudinarydone", function (e, data) {
-
-        if ($.fn.new_lot_mainImage == undefined)
-        {
-            $.fn.new_lot_mainImage = "'" + data.result.public_id.toString() + "'";
-            $.fn.new_lot_images = [];
-        }
-        else
-        {
-            $.fn.new_lot_images.push("'"+data.result.public_id.toString()+"'");
-        }
-
-
-        new Noty({
-            type: 'success',
-            text: 'Image uploaded'
-        }).show();
-
-    })
-</script>
     <script type="text/javascript" src="/js/countdown.js"></script>
-    <script type="text/javascript" src="/js/lot.js"></script>
-<script>
+    <script>
         $(function () {
             var $pagination = $('#pagination-demo');
             var defaultsOpts = {
@@ -188,7 +94,7 @@
             $pagination.twbsPagination(defaultsOpts);
 
             $.get(
-                '/api/users/@User.Identity.Name/lots',
+                '/api/users/@Model.Item1.UserName/lots',
                 {
                     page: 0,
                     count:3
@@ -206,7 +112,7 @@
                     startPage: currentPage,
                     totalPages: totalPages
                 })).on('page', function (_page) {
-                    $.get('/api/users/@User.Identity.Name/lots',{ page: _page, count:3},onSuccess);
+                    $.get('/api/users/@Model.Item1.UserName/lots',{ page: page, count:3},onSuccess);
                 });
             };
 
@@ -249,7 +155,7 @@
             }
 
         })
-    </script>  
+    </script>
 <script>
         $(function () {
             var $paginationBids = $('#pagination-bids');
@@ -259,7 +165,7 @@
             $paginationBids.twbsPagination(defaultsOpts1);
 
             $.get(
-                '/api/users/@User.Identity.Name/bids',
+                '/api/users/@Model.Item1.UserName/bids',
                 {
                     page: 0,
                     count:3
@@ -277,7 +183,7 @@
                     startPage: currentPage,
                     totalPages: totalPages
                 })).on('page', function (_page) {
-                    $.get('/api/users/@User.Identity.Name/bids',{ page: _page, count:3},onSuccess1);
+                    $.get('/api/users/@Model.Item1.UserName/bids',{ page: _page, count:3},onSuccess1);
                 });
             };
 
@@ -297,11 +203,11 @@
 
                     var time = $('<td />');
                     time.text(this.time);
-                    
+
                     row.append(id);
                     row.append(lotId);
                     row.append(amount);
-                    
+
                     row.append(time);
                     table.append(row);
                 })

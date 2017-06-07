@@ -7,9 +7,9 @@ using CTA.Context;
 
 namespace CTA.Migrations
 {
-    [DbContext(typeof(Context.DBContext))]
-    [Migration("20170517191300_Init")]
-    partial class Init
+    [DbContext(typeof(DBContext))]
+    [Migration("20170605020902_AddCurrBid")]
+    partial class AddCurrBid
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -44,9 +44,17 @@ namespace CTA.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int>("CurrBid");
+
                     b.Property<string>("Description");
 
-                    b.Property<int>("MaxBid");
+                    b.Property<DateTime>("ExpiredDate");
+
+                    b.Property<string>("Images");
+
+                    b.Property<string>("MainImage");
+
+                    b.Property<int>("MinBid");
 
                     b.Property<string>("Title");
 
@@ -104,6 +112,8 @@ namespace CTA.Migrations
                         .HasMaxLength(256);
 
                     b.Property<bool>("EmailConfirmed");
+
+                    b.Property<string>("Image");
 
                     b.Property<bool>("LockoutEnabled");
 
@@ -232,7 +242,7 @@ namespace CTA.Migrations
                         .HasForeignKey("LotId");
 
                     b.HasOne("CTA.Models.User", "User")
-                        .WithMany()
+                        .WithMany("Bids")
                         .HasForeignKey("UserId");
                 });
 

@@ -9,6 +9,10 @@
     <UserSecretsId>448e50d3-4b80-4fc3-9b26-c32007376b72</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="wwwroot\js\countdown.js" />
+    <Content Include="wwwroot\js\lot.js" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="6.0.2" />
     <PackageReference Include="Cloudinary.Core" Version="1.31.0" />
     <PackageReference Include="Cloudinary.Core.Html" Version="1.31.0" />
@@ -17,7 +21,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Razor" Version="1.1.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="1.1.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="1.1.1" />
-    <PackageReference Include="Microsoft.NETCore.App" Version="1.0.1" />
+    <PackageReference Include="Microsoft.NETCore.App" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version="1.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Routing" Version="1.0.1" />
@@ -31,7 +35,9 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="1.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="1.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink.Loader" Version="14.0.0" />
+    <PackageReference Include="Moq" Version="4.7.25" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.2" />
+    <PackageReference Include="NSubstitute" Version="2.0.3" />
   </ItemGroup>
   <ProjectExtensions>
     <VisualStudio>

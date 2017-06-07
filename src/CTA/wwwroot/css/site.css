@@ -9,6 +9,18 @@ legend{
     color:white;
 }
 
+.modal-body, .modal-header{
+    color:black;
+}
+
+#newBid{
+    color:black;
+}
+
+.carousel-inner > .item > img {
+    margin: 0 auto;
+}
+
 .body-content {
     padding-left: 15px;
     padding-right: 15px;
@@ -19,6 +31,11 @@ input,
 select,
 textarea {
     max-width: 280px;
+}
+
+.table-borderless td,
+.table-borderless th{
+    border:0;
 }
 
 #custom-bootstrap-menu {

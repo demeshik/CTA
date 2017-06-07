@@ -5,17 +5,23 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
+using CTA.Services;
 
 namespace CTA.Controllers
 {
+    [Route("[controller]")]
     public class RegistrationController : Controller
     {
-        // GET: /<controller>/
-        public IActionResult Index()
-        {
+        private readonly ICloudInterface _cloud;
 
-            Cloudinary cloud = new Cloudinary("cloudinary://699756615932382:m5MHlmJJkZmGa_H_7VPdYpo6JyA@djrazor308");
-            return View(cloud);
+        public RegistrationController(ICloudInterface cloud)
+        {
+            _cloud = cloud;
+        }
+
+        public IActionResult Index()
+        { 
+            return View(_cloud.Configuration());
         }
     }
 }

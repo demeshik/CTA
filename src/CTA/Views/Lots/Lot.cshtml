@@ -1,0 +1,217 @@
+﻿@using CloudinaryDotNet
+@model Tuple<CTA.ViewModels.LotModel,Cloudinary>
+
+@section login
+{
+    @if (User.Identity.Name != null)
+    {
+        @Html.Partial("UserCabPartial");
+    }
+    else
+    {
+        @Html.Partial("LoginPartial");
+    }
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="carousel slide" id="carousel-984720">
+                <ol class="carousel-indicators">
+                </ol>
+                <div class="carousel-inner">
+                </div> <a class="left carousel-control" href="#carousel-984720" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a> <a class="right carousel-control" href="#carousel-984720" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
+            </div>
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="tabbable" id="tabs-90137">
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a href="#panel-667404" data-toggle="tab">Features</a>
+                            </li>
+                            <li>
+                                <a href="#panel-174659" data-toggle="tab">Description</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="panel-667404">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td>Title</td>
+                                            <td>@Model.Item1.Title</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Expired</td>
+                                            <td class="expiredDate"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Owner</td>
+                                            <td><a href="/users/@Model.Item1.UserId">@Model.Item1.UserId</a></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane" id="panel-174659">
+                                <p>
+                                    @Model.Item1.Description
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <div class="row">
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="row">
+                                <div class="col-md-12">
+                                </div>
+                            </div>
+                            <div class="row">
+                            <table class="table table-borderless">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <button class="btn-sm btn-block btn-default" id="rfrshbd">Refresh current bid</button>
+                                        </td>
+                                        <td id="maxbid-div">
+                                            @Model.Item1.CurrBud
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <button class="btn-sm btn-block btn-default"id="sndbd">Add a new bid</button>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="input-sm" id="newBid" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+<script type="text/javascript" src="/js/countdown.js"></script>
+<script>
+    $(function () {
+        var ts = new Date('@Model.Item1.ExpiredDate.ToString("O")');
+        $.fn.countdown({
+            timestamp: ts,
+            callback: function (days, hours, minutes, seconds) {
+
+                var message = "";
+                message += days + "d; ";
+                message += hours + "h; ";
+                message += minutes + "m; ";
+                message += seconds + "s";
+
+                $('.expiredDate').text(message);
+            }
+        });
+
+        (function () {
+            var mainImageSwitcher = $('<li />', { class: 'active' });
+            mainImageSwitcher.attr("data-target", "#carousel-984720");
+            mainImageSwitcher.attr("data-slide-to", "0");
+
+            var mainImageDiv = $('<div />', { class: 'item active' });
+            mainImageDiv.css("text-align", "center");
+            var mainImageUrl = '@Model.Item2.Api.UrlImgUp.BuildUrl(Model.Item1.MainImage)';
+            var MI = mainImageUrl.replace(/\%27/g, '');
+            var mainImage = $('<img />', { src: MI ,height:"400px"});
+            mainImageDiv.html(mainImage);
+
+            $('.carousel-indicators').html(mainImageSwitcher);
+            $('.carousel-inner').html(mainImageDiv);
+        }());
+
+        var images = '@Model.Item1.Images';
+        var out = images.replace(/\&#x27;/g, '');
+        var s = out.split(',');
+
+        var finalImages = [];
+
+        s.forEach(function (str) {
+            finalImages.push(str);
+        })
+
+
+
+        finalImages.forEach(function (image, index) {
+            var ImageSwitcher = $('<li />');
+            ImageSwitcher.attr("data-target", "#carousel-984720");
+            ImageSwitcher.attr("data-slide-to", (index+1).toString());
+            
+            var ImageDiv = $('<div />', { class: 'item' });
+            ImageDiv.css("text-align", "center");
+            var ImageUrl = 'http://res.cloudinary.com/djrazor308/image/upload/v1496532713/' + image;
+            var Image = $('<img />', { src: ImageUrl ,height:"400px"});
+
+            ImageDiv.html(Image);
+            $('.carousel-indicators').append(ImageSwitcher);
+            $('.carousel-inner').append(ImageDiv);
+        })
+
+        $('#rfrshbd').on('click', function (e) {
+            e.preventDefault();
+
+            $.get('/api/lots/@Model.Item1.Id/bids/max', function (maxbid) {
+                new Noty({
+                    type: 'success',
+                    text: 'New max bid!'
+                }).show();
+                $('#maxbid-div').text(maxbid);
+            });
+        });
+
+        $('#sndbd').on('click', function (e) {
+            e.preventDefault();
+
+            var bid = {
+                Amount: parseInt($('#newBid').val()),
+                LotId:@Model.Item1.Id,
+                UserName:'@User.Identity.Name',
+                Time: new Date().toISOString()
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: '/api/lots/@Model.Item1.Id/bids',
+                contentType: 'application/json;charset=utf-8',
+                data: JSON.stringify(bid)
+            }).success(function (data) {
+
+                new Noty({
+                    text: 'Your bid successfully accepted!'
+                }).show();
+                $('#maxbid-div').text(data.Amount);
+
+            }).fail(function (err) {
+                var errs = JSON.parse(err.responseText).errors;
+                new Noty({
+                    type: 'error',
+                    text: errs.SmallBid
+                }).show();
+            })
+        })
+
+    })
+</script>
+}

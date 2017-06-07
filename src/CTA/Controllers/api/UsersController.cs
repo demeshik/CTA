@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CTA.Context;
 using CTA.DTO;
 using CTA.Models;
 using CTA.Utils;
@@ -6,6 +7,7 @@ using CTA.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,64 +18,89 @@ namespace CTA.Controllers.api
     {
         private readonly UserManager<User> userManager;
         private readonly RoleManager<Role> roleManager;
+        private readonly DBContext db;
 
-        public UsersController(UserManager<User> _userManager, RoleManager<Role> _roleManager)
+        public UsersController(UserManager<User> _userManager, RoleManager<Role> _roleManager,DBContext _db)
         {
             userManager = _userManager;
             roleManager = _roleManager;
-        }
-
-        private ActionResult SendBad(IdentityError identityError)
-        {
-            return BadRequest(new { status = "Error", description = identityError.Description });
-        }
-        private ActionResult SendBad(IEnumerable<IdentityError> Errors)
-        {
-            string ErrorMessage = string.Empty;
-            foreach (var error in Errors)
-            {
-                ErrorMessage += error.Code + ";";
-            }
-            ErrorMessage.Remove(ErrorMessage.Length - 1, 1);
-            ErrorMessage += ".";
-            return BadRequest(new { status = "Error", description = ErrorMessage });
+            db = _db;
         }
 
         [HttpGet]
-        public IEnumerable<UserDTO> GetAll()
+        public ActionResult GetAll([FromQuery] string page, [FromQuery] string count)
         {
             Mapper.Initialize(config => config.CreateMap<User, UserDTO>());
             var users = Mapper.Map<IQueryable<User>, IEnumerable<UserDTO>>(userManager.Users);
-            return users;
+
+            var userModels = new List<UserDTO>();
+            var pagList = Utils.Utils.GetPaginationItems(ref page, ref count, userManager.Users);
+            foreach (var user in pagList)
+            {
+                userModels.Add(Mapper.Map<User, UserDTO>(user));
+
+            }
+            return Json(new { meta = new { totalCount = userManager.Users.Count(), page = page, count = count }, data = userModels });
         }
 
         [HttpGet("{key}")]
-        public UserDTO GetUserById(string key)
+        public ActionResult GetUserById(string key)
         {
-            int _id;
             Models.User _user = null;
-            if (int.TryParse(key, out _id)) 
+            if (int.TryParse(key, out int _id)) 
                 _user = userManager.FindByIdAsync(key).Result;
             else
                 _user = userManager.FindByNameAsync(key).Result;
-            Mapper.Initialize(config => config.CreateMap<User, UserDTO>());
-            return Mapper.Map<User, UserDTO>(_user);
+            if (_user != null)
+            {
+                Mapper.Initialize(config => config.CreateMap<User, UserDTO>());
+                return Ok(Mapper.Map<User, UserDTO>(_user));
+            }
+            else
+                return NotFound();
+
         }
 
-        //[Authorize]
-        [HttpGet("{id}/lots")]
-        public IEnumerable<Lot> GetUserLots(string id)
+        [HttpGet("{key}/lots")]
+        public ActionResult GetUserLots(string key, [FromQuery] string page, [FromQuery] string count)
         {
-            User user = userManager.FindByIdAsync(id).Result;
-            return user.Lots;
+            User user = null;
+            if (int.TryParse(key, out int _id))
+                user = db.Users.Include(c => c.Lots).FirstOrDefault(c => c.Id == _id);
+            else
+                user = db.Users.Include(c => c.Lots).FirstOrDefault(c => c.UserName == key);
+
+            Mapper.Initialize(cfg => cfg.CreateMap<Lot, LotModel>());
+            var lotModels = new List<LotModel>();
+            var pagList = Utils.Utils.GetPaginationItems(ref page, ref count, user.Lots);
+            foreach(var lot in pagList)
+            {
+                lotModels.Add(Mapper.Map<Lot, LotModel>(lot));
+
+            }
+
+            return Json(new { meta = new { totalCount = user.Lots.Count, page = page, count = count }, data = lotModels });
         }
 
-        //[Authorize]
-        [HttpGet("{id}/bids")]
-        public IEnumerable<Bid> GetUserBids(string id)
+        [HttpGet("{key}/bids")]
+        public ActionResult GetUserBids(string key, [FromQuery] string page, [FromQuery] string count)
         {
-            User user = userManager.FindByIdAsync(id).Result;
-            return user.Bids;
+            User user = null;
+            if (int.TryParse(key, out int _id))
+                user = db.Users.Include(c => c.Bids).FirstOrDefault(c => c.Id == _id);
+            else
+                user = db.Users.Include(c => c.Bids).FirstOrDefault(c => c.UserName == key);
+
+            Mapper.Initialize(cfg => cfg.CreateMap<Bid, BidModel>());
+            var bidModels = new List<BidModel>();
+            var pagList = Utils.Utils.GetPaginationItems(ref page, ref count, user.Bids);
+            foreach (var bid in pagList)
+            {
+                bidModels.Add(Mapper.Map<Bid, BidModel>(bid));
+
+            }
+
+            return Json(new { meta = new { totalCount = user.Bids.Count, page = page, count = count }, data = bidModels });
         }
 
         [HttpPost]
@@ -88,6 +115,7 @@ namespace CTA.Controllers.api
                     Surname = user.Surname,
                     PhoneNumber = user.PhoneNumber,
                     Email = user.Email,
+                    Image = user.Image,
                     Country = user.Country,
                     City = user.City,
                     CreditCard = user.CreditCard
@@ -105,7 +133,7 @@ namespace CTA.Controllers.api
                         IdentityResult roleResult = roleManager.CreateAsync(role).Result;
                         if (!roleResult.Succeeded)
                         {
-                            return SendBad(roleResult.Errors);
+                            return StatusCode(400, new { Errors = roleResult.Errors });
                         }
                     }
                     userManager.AddToRoleAsync(_user, "User").Wait();
@@ -113,7 +141,9 @@ namespace CTA.Controllers.api
                     return Created($"/api/users/{_user.UserName}", Mapper.Map<User, UserDTO>(_user));
                 }
                 else
-                    return SendBad(result.Errors);
+                {
+                    return BadRequest(result.Errors);
+                }
             }
             return StatusCode(400, new { Errors = ModelState.Errors() });
         }

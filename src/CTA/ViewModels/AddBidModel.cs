@@ -4,20 +4,18 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CTA.Models
+namespace CTA.ViewModels
 {
-    public class Bid
+    public class AddBidModel
     {
-        [Key]
-        public int Id { get; set; }
+        [Required]
         public DateTime Time { get; set; }
+        [Required]
         [DataType(DataType.Currency)]
         public int Amount { get; set; }
-
-        public int? LotId { get; set; }
-        public virtual Lot Lot { get; set; }
-
-        public int? UserId { get; set; }
-        public virtual User User { get; set; }
+        [Required]
+        public int LotId { get; set; }
+        [Required]
+        public string UserName { get; set; }
     }
 }

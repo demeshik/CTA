@@ -43,13 +43,17 @@ namespace CTA.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int>("CurrBid");
+
                     b.Property<string>("Description");
+
+                    b.Property<DateTime>("ExpiredDate");
 
                     b.Property<string>("Images");
 
                     b.Property<string>("MainImage");
 
-                    b.Property<int>("MaxBid");
+                    b.Property<int>("MinBid");
 
                     b.Property<string>("Title");
 

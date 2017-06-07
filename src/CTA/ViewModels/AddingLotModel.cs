@@ -4,33 +4,27 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CTA.Models
+namespace CTA.ViewModels
 {
-    public class Lot
+    public class AddingLotModel
     {
-        [Key]
-        public int Id { get; set; }
+        [Required]
         public string Title { get; set; }
+        [Required]
         public string Description { get; set; }
+        [Required]
         public string MainImage { get; set; }
+        [Required]
         public string Images { get; set; }
 
+        [Required]
         public DateTime ExpiredDate { get; set; }
 
+        [Required]
         [DataType(DataType.Currency)]
         public int MinBid { get; set; }
 
-        [DataType(DataType.Currency)]
-        public int CurrBid { get; set; }
-
-
-        public int? UserId { get; set; }
-        public virtual User User { get; set; }
-
-        public virtual ICollection<Bid> Bids { get; set; }
-        public Lot()
-        {
-            Bids = new List<Bid>();
-        }
+        [Required]
+        public string UserId { get; set; }
     }
 }

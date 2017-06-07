@@ -11,6 +11,8 @@ using Microsoft.Extensions.Logging;
 using CTA.Context;
 using CTA.Models;
 using CTA.DTO;
+using CTA.Services;
+using CTA.Repositories;
 
 namespace CTA
 {
@@ -41,12 +43,15 @@ namespace CTA
                 })
                 .AddEntityFrameworkStores<Context.DBContext,int>()
                 .AddDefaultTokenProviders();
-            
+
+            services.AddRouting();
             services.AddMvc();
             services.Configure<AppConfig>(Configuration.GetSection("Cloudinary"));
+            services.AddTransient<ICloudInterface, CloudService>();
+            services.AddScoped<ISignInManager, AppSignInManager>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
@@ -64,12 +69,8 @@ namespace CTA
 
             app.UseStaticFiles();
             app.UseIdentity();
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
+
+            app.UseMvcWithDefaultRoute();
         }
     }
 }

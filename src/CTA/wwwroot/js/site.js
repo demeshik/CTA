@@ -22,12 +22,6 @@
           $this.button('reset');
           var errs = JSON.parse(err.responseText).errors;
 
-          /*for (var i = 0; i < errs.length; i++) {
-              $("<label for='" + errs[i].key.toLowerCase() + "' class='error'></label>")
-                  .html(errs[i].value[0])
-                  .css("color","red").appendTo($("input#" + errs[i].key.toLowerCase()).parent());
-          }*/
-
           for (var i = 0; i < errs.length; i++) {
               new Noty({
                   type: 'error',
@@ -76,12 +70,23 @@ $('#signup').click(function (e) {
             text: 'All is good! Now you can login by your username and password'
         }).show();
     }).fail(function (err) {
-        var errs = JSON.parse(err.responseText).errors;
+
+        if (!!err.responseJSON.errors) {
+            var errs = err.responseJSON.errors;
+            for (var i = 0; i < errs.length; i++) {
+                new Noty({
+                    type: 'error',
+                    text: errs[i].key + ": " + errs[i].value[0]
+                }).show();
+            }
+        }
+        else
+            var errs = err.responseJSON;
         for (var i = 0; i < errs.length; i++) {
             new Noty({
                 type: 'error',
-                text: errs[i].key + ": " + errs[i].value[0]
+                text: errs[i].description
             }).show();
         }
     });
-})
+});

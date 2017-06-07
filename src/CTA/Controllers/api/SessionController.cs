@@ -7,6 +7,7 @@ using AutoMapper;
 using CTA.DTO;
 using Microsoft.AspNetCore.Authorization;
 using CTA.Utils;
+using CTA.Repositories;
 
 namespace CTA.Controllers.api
 {
@@ -14,10 +15,12 @@ namespace CTA.Controllers.api
     public class SessionController : Controller
     {
         private readonly SignInManager<User> loginManager;
+        private readonly ISignInManager signInManager;
 
-        public SessionController(SignInManager<User> _loginManager)
+        public SessionController(ISignInManager _signManager)
         {
-            loginManager = _loginManager;
+            signInManager = _signManager;
+            
         }
 
         private ActionResult SendBad(IdentityError identityError)
@@ -41,7 +44,7 @@ namespace CTA.Controllers.api
         {
             if (ModelState.IsValid)
             {
-                var result = loginManager.PasswordSignInAsync(user.UserName, user.Password, user.RememberMe, false).Result;
+                var result = signInManager.Login(user.UserName, user.Password, user.RememberMe, false).Result;
                 if (result.Succeeded)
                     return Ok(new { status = "OK" });
                 else

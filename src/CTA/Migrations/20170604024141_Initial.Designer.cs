@@ -8,8 +8,8 @@ using CTA.Context;
 namespace CTA.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20170517210255_Change-UserController")]
-    partial class ChangeUserController
+    [Migration("20170604024141_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -46,7 +46,13 @@ namespace CTA.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<int>("MaxBid");
+                    b.Property<DateTime>("ExpiredDate");
+
+                    b.Property<string>("Images");
+
+                    b.Property<string>("MainImage");
+
+                    b.Property<int>("MinBid");
 
                     b.Property<string>("Title");
 
@@ -104,6 +110,8 @@ namespace CTA.Migrations
                         .HasMaxLength(256);
 
                     b.Property<bool>("EmailConfirmed");
+
+                    b.Property<string>("Image");
 
                     b.Property<bool>("LockoutEnabled");
 

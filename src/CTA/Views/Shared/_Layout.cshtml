@@ -33,30 +33,11 @@
                     <li>
                         <a href="/">Home</a>
                     </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Lots <span class="caret"></span></a>
-                        <ul id="quick-nav" class="dropdown-menu">
-                            <li>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <form class="form" role="form" accept-charset="UTF-8" id="quick-form">
-                                            <div class="form-group">
-                                                <button id="account-button" type="button" class="btn btn-link btn-sm btn-block"><a href="/account">New</a></button>
-                                            </div>
-                                            <div class="form-group">
-                                                <button id="logout" type="button" class="btn btn-link btn-sm btn-block">Used</button>
-                                            </div>
-                                            <div class="form-group">
-                                                <button id="logout" type="button" class="btn btn-link btn-sm btn-block">Disaster</button>
-                                            </div>
-                                        </form>
-                                        </div>
-                                </div>
-                            </li>
-                        </ul>
+                    <li>
+                        <a href="/lots">Lots</a>
                     </li>
                     <li>
-                        <a href="/products">Users</a>
+                        <a href="/users">Users</a>
                     </li>
                     <li>
                         <a href="/about-us">About</a>
@@ -86,6 +67,7 @@
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script src="~/js/noty.js" type="text/javascript"></script>
+        <script src="~/js/jquery.twbsPagination.js" type="text/javascript"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
     </environment>
     <environment names="Staging,Production">
@@ -98,6 +80,7 @@
                 asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
         </script>
         <script src="~/js/noty.min.js" type="text/javascript"></script>
+        <script src="~/js/jquery.twbsPagination.min.js" type="text/javascript"></script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
 

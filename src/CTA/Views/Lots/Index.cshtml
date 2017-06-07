@@ -1,0 +1,27 @@
+﻿@{
+    ViewData["Title"] = "Lots";
+}
+
+
+@section login
+{
+    @if (User.Identity.Name != null)
+    {
+        @Html.Partial("UserCabPartial");
+    }
+    else
+    {
+        @Html.Partial("LoginPartial");
+    }
+}
+
+<div class="row contents">
+</div>
+
+
+
+@section scripts
+{
+    <script type="text/javascript" src="/js/jquery.cloudinary.js"></script>
+    <script type="text/javascript" src="/js/lots-loader.js"></script>
+}
